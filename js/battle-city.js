@@ -146,8 +146,7 @@
       this.game.websocketClient.send(
           {
             'type': 'player',
-            'data':
-            {
+            'data': {
               'id': this.id,
               'frame': this.frame,
               'x': this.position.x,
@@ -155,6 +154,7 @@
             }
           }
       );
+    }
   };
   
   var Bullet = function (game, position, velocity) {
