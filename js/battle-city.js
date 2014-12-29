@@ -4,8 +4,8 @@
   var Game = function () {
     var screen = document.getElementById('screen').getContext('2d');
     this.size = {
-      x: screen.canvas.width, 
-      y: screen.canvas.height
+      w: screen.canvas.width, 
+      h: screen.canvas.height
     };
     this.players = [].concat(new Player(this));
     
@@ -29,7 +29,7 @@
     },
     
     draw: function (screen) {
-      screen.clearRect(0, 0, this.size.x, this.size.y);
+      screen.clearRect(0, 0, this.size.w, this.size.h);
       
       for (var i = 0, l = this.players.length; i < l; i++) {
         if (this.players[i].draw !== undefined) {
@@ -42,8 +42,8 @@
   var Player = function (game) {
     this.game = game;
     this.position = {
-      x: this.game.size.x / 2 - 13, 
-      y: this.game.size.y - 30 
+      x: this.game.size.w / 2 - 13, 
+      y: this.game.size.h - 30 
     };
     this.frame = 0;
     this.size = {
@@ -55,16 +55,16 @@
   
   Player.prototype = {
     update: function () {
-      if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT)) {
+      if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT) && (this.position.x > 0)) {
         this.position.x -= 2;
         this.frame = 3;
-      } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT)) {
+      } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT) && (this.position.x + this.size.w < this.game.size.w)) {
         this.position.x += 2;
         this.frame = 1;
-      } else if (this.keyboarder.isDown(this.keyboarder.KEYS.UP)) {
+      } else if (this.keyboarder.isDown(this.keyboarder.KEYS.UP) && (this.position.y > 0)) {
         this.position.y -= 2;
         this.frame = 0;
-      } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN)) {
+      } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN) && (this.position.y + this.size.h < this.game.size.h)) {
         this.position.y += 2;
         this.frame = 2;
       }
@@ -74,7 +74,7 @@
       var img = new Image();
       img.src = 'img/sprite.png';
       
-      screen.drawImage(img, 0 + (this.size.w * this.frame), 18, this.size.w, this.size.h, this.position.x, this.position.y, this.size.w, this.size.h);
+      screen.drawImage(img, 0 + (this.size.h * this.frame), 18, this.size.w, this.size.h, this.position.x, this.position.y, this.size.w, this.size.h);
     }
   };
   
