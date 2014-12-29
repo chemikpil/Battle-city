@@ -7,7 +7,8 @@
       w: screen.canvas.width, 
       h: screen.canvas.height
     };
-    this.players = [].concat(new Player(this));
+    this.bodies = [];
+    this.websocketClient = new WebsocketClient(this);
     
     var self = this;
     var tick = function () {
@@ -21,9 +22,9 @@
   
   Game.prototype = {
     update: function () {
-      for (var i = 0, l = this.players.length; i < l; i++) {
-        if (this.players[i].update !== undefined) {
-          this.players[i].update(screen);
+      for (var i in this.bodies) {
+        if (this.bodies[i].isHuman && this.bodies[i].update !== undefined) {
+          this.bodies[i].update(screen);
         }
       }
     },
@@ -31,9 +32,9 @@
     draw: function (screen) {
       screen.clearRect(0, 0, this.size.w, this.size.h);
       
-      for (var i = 0, l = this.players.length; i < l; i++) {
-        if (this.players[i].draw !== undefined) {
-          this.players[i].draw(screen);
+      for (var i in this.bodies) {
+        if (this.bodies[i].draw !== undefined) {
+          this.bodies[i].draw(screen);
         }
       }
     },
@@ -223,7 +224,7 @@
         player.id = messageData;
         player.isHuman = true;
 
-        self.game.players[messageData] = player;
+        self.game.bodies[messageData] = player;
 
         player.notify();
       }
@@ -235,7 +236,7 @@
         player.position.x = messageData.x;
         player.position.y = messageData.y;
 
-        self.game.players[messageData.id] = player;
+        self.game.bodies[messageData.id] = player;
       }
     }
   };
