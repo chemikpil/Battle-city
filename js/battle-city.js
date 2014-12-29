@@ -21,7 +21,11 @@
   
   Game.prototype = {
     update: function () {
-      
+      for (var i = 0, l = this.players.length; i < l; i++) {
+        if (this.players[i].update !== undefined) {
+          this.players[i].update(screen);
+        }
+      }
     },
     
     draw: function (screen) {
@@ -45,11 +49,20 @@
       w: 26,
       h: 26
     };
+    this.keyboarder = new Keyboarder();
   };
   
   Player.prototype = {
     update: function () {
-    
+      if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT)) {
+        this.position.x -= 2;
+      } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT)) {
+        this.position.x += 2;
+      } else if (this.keyboarder.isDown(this.keyboarder.KEYS.UP)) {
+        this.position.y -= 2;
+      } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN)) {
+        this.position.y += 2;
+      }
     },
     
     draw: function (screen) {
@@ -57,6 +70,32 @@
       img.src = 'img/sprite.png';
       
       screen.drawImage(img, 0, 18, this.size.w, this.size.h, this.position.x, this.position.y, this.size.w, this.size.h);
+    }
+  };
+  
+  var Keyboarder = function () {
+    this.keyState = {};
+    var self = this;
+    
+    window.addEventListener('keydown', function (e) {
+      self.keyState[e.keyCode] = true
+    });
+    
+    window.addEventListener('keyup', function (e) {
+      self.keyState[e.keyCode] = false
+    });
+  };
+  
+  Keyboarder.prototype = {
+    KEYS: {
+      LEFT: 37,
+      UP: 38,
+      RIGHT: 39,
+      DOWN: 40
+    },
+    
+    isDown: function (keyCode) {
+      return !!this.keyState[keyCode];
     }
   }
   
