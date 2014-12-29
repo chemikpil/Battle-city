@@ -7,7 +7,7 @@
       w: screen.canvas.width, 
       h: screen.canvas.height
     };
-    this.bodies = [].concat(new Player(this));
+    this.players = [].concat(new Player(this));
     
     var self = this;
     var tick = function () {
@@ -21,9 +21,9 @@
   
   Game.prototype = {
     update: function () {
-      for (var i = 0, l = this.bodies.length; i < l; i++) {
-        if (this.bodies[i].update !== undefined) {
-          this.bodies[i].update(screen);
+      for (var i = 0, l = this.players.length; i < l; i++) {
+        if (this.players[i].update !== undefined) {
+          this.players[i].update(screen);
         }
       }
     },
@@ -31,9 +31,9 @@
     draw: function (screen) {
       screen.clearRect(0, 0, this.size.w, this.size.h);
       
-      for (var i = 0, l = this.bodies.length; i < l; i++) {
-        if (this.bodies[i].draw !== undefined) {
-          this.bodies[i].draw(screen);
+      for (var i = 0, l = this.players.length; i < l; i++) {
+        if (this.players[i].draw !== undefined) {
+          this.players[i].draw(screen);
         }
       }
     },
@@ -52,6 +52,8 @@
   
   var Player = function (game) {
     this.game = game;
+    this.id = 0;
+    this.isHuman = false;
     this.position = {
       x: this.game.size.w / 2 - 13, 
       y: this.game.size.h - 30 
@@ -69,15 +71,19 @@
       if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT) && (this.position.x > 0)) {
         this.position.x -= 2;
         this.frame = 3;
+        this.notify();
       } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT) && (this.position.x + this.size.w < this.game.size.w)) {
         this.position.x += 2;
         this.frame = 1;
+        this.notify();
       } else if (this.keyboarder.isDown(this.keyboarder.KEYS.UP) && (this.position.y > 0)) {
         this.position.y -= 2;
         this.frame = 0;
+        this.notify();
       } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN) && (this.position.y + this.size.h < this.game.size.h)) {
         this.position.y += 2;
         this.frame = 2;
+        this.notify();
       }
       
       if (this.keyboarder.isDown(this.keyboarder.KEYS.SPACE)) {
@@ -134,7 +140,21 @@
          this.position.x, this.position.y, 
          this.size.w, this.size.h
       );
-    }
+    },
+
+    notify: function () {
+      this.game.websocketClient.send(
+          {
+            'type': 'player',
+            'data':
+            {
+              'id': this.id,
+              'frame': this.frame,
+              'x': this.position.x,
+              'y': this.position.y
+            }
+          }
+      );
   };
   
   var Bullet = function (game, position, velocity) {
@@ -186,15 +206,45 @@
     }
   }
 
-  var Client = function () {
+  var WebsocketClient = function (game) {
+    this.game = game;
     this.connection = new WebSocket('ws://localhost:8080');
 
-    this.connection.onopen = function (e) {
-      console.log("Connection established!");
-    }
-
+    var self = this;
     this.connection.onmessage = function (e) {
-      console.log(e.data);
+      //console.log('Receiving: ' + e.data);
+      var data = JSON.parse(e.data);
+      var messageType = data.type;
+      var messageData = data.data;
+
+      if (messageType == 'ID') {
+        var player = new Player(self.game);
+
+        player.id = messageData;
+        player.isHuman = true;
+
+        self.game.players[messageData] = player;
+
+        player.notify();
+      }
+
+      else if (messageType == 'player') {
+        var player = new Player(self.game);
+        player.id = messageData.id;
+        player.frame = messageData.frame;
+        player.position.x = messageData.x;
+        player.position.y = messageData.y;
+
+        self.game.players[messageData.id] = player;
+      }
+    }
+  };
+
+  WebsocketClient.prototype = {
+    send: function (data) {
+      var jsondata = JSON.stringify(data);
+      //console.log('Sending: ' + jsondata);
+      this.connection.send(jsondata);
     }
   };
   

@@ -20,6 +20,8 @@ class BattleServer implements MessageComponentInterface
     {
         $this->clients->attach($conn);
 
+        $conn->send(new Message('ID', $conn->resourceId));
+
         echo "New connection! ({$conn->resourceId})\n";
     }
 
@@ -48,6 +50,28 @@ class BattleServer implements MessageComponentInterface
         echo "An error has occurred: {$e->getMessage()}\n";
 
         $conn->close();
+    }
+}
+
+class Message
+{
+    private $type;
+    private $data;
+
+    public function __construct($type, $data)
+    {
+        $this->type = $type;
+        $this->data = $data;
+    }
+
+    public function __toString()
+    {
+        return json_encode(
+            array(
+                'type' => $this->type,
+                'data' => $this->data
+            )
+        );
     }
 }
 
