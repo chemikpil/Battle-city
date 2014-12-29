@@ -45,6 +45,7 @@
       x: this.game.size.x / 2 - 13, 
       y: this.game.size.y - 30 
     };
+    this.frame = 0;
     this.size = {
       w: 26,
       h: 26
@@ -56,12 +57,16 @@
     update: function () {
       if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT)) {
         this.position.x -= 2;
+        this.frame = 3;
       } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT)) {
         this.position.x += 2;
+        this.frame = 1;
       } else if (this.keyboarder.isDown(this.keyboarder.KEYS.UP)) {
         this.position.y -= 2;
+        this.frame = 0;
       } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN)) {
         this.position.y += 2;
+        this.frame = 2;
       }
     },
     
@@ -69,7 +74,7 @@
       var img = new Image();
       img.src = 'img/sprite.png';
       
-      screen.drawImage(img, 0, 18, this.size.w, this.size.h, this.position.x, this.position.y, this.size.w, this.size.h);
+      screen.drawImage(img, 0 + (this.size.w * this.frame), 18, this.size.w, this.size.h, this.position.x, this.position.y, this.size.w, this.size.h);
     }
   };
   
