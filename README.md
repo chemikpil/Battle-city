@@ -1,10 +1,10 @@
 Battle City 
 ================
-# Installation
+## Installation
 ```
 php composer.phar install
 ```
-# Starting server
+## Starting server
 ```
 php server.php
 ```
