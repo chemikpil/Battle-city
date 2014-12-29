@@ -98,24 +98,21 @@
       return !!this.keyState[keyCode];
     }
   }
+
+  var Client = function () {
+    this.connection = new WebSocket('ws://localhost:8080');
+
+    this.connection.onopen = function (e) {
+      console.log("Connection established!");
+    }
+
+    this.connection.onmessage = function (e) {
+      console.log(e.data);
+    }
+  };
   
   window.addEventListener('load', function () {
     new Game();
   })
   
-}());// TODO tymczasowo wrzucam żeby było wiadomo jak się komunikować z serwerem
-
-window.onload = function () {
-    var conn = new WebSocket('ws://localhost:8080');
-    conn.onopen = function (e) {
-        //console.log("Connection established!");
-    };
-
-    conn.onmessage = function (e) {
-        //console.log(e.data);
-    };
-
-    /*document.getElementsByName('send')[0].onclick = function (event) {
-        conn.send('test');
-    }*/
-}
+}());
