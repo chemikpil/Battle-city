@@ -14,7 +14,7 @@ BattleCity.Bullet = function (game, position, velocity, id) {
 BattleCity.Bullet.prototype = {
   update: function () {
     if (this.position.x < 0 || this.position.y < 0 || this.position.x > this.game.size.w || this.position.y > this.game.size.h) {
-      //this.game.removeBullet(this);
+      this.game.removeBullet(this);
       return; 
     }
 
@@ -33,5 +33,13 @@ BattleCity.Bullet.prototype = {
       'x': this.position.x,
       'y': this.position.y
     };
+  },
+
+  notify: function () {
+    var data = {
+      'type': 'bullet',
+      'data': this.toJSON()
+    }
+    this.game.websocketClient.send(data);
   }
 };

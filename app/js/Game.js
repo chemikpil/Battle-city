@@ -54,7 +54,7 @@ BattleCity.Game.prototype = {
   update: function () {
     var bodies = this.players;
     for (var i = 0, l = bodies.length; i < l; i++) {
-      if (bodies[i].update !== undefined && bodies[i].isOwn || bodies[i] instanceof BattleCity.Bullet) {
+      if (bodies[i] !== undefined && bodies[i].update !== undefined && bodies[i].isOwn || bodies[i] instanceof BattleCity.Bullet) {
         bodies[i].update(screen);
       }
     }
