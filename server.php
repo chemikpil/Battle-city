@@ -22,6 +22,12 @@ class BattleServer implements MessageComponentInterface
 
         $conn->send(new Message('connection', array('id' => $conn->resourceId)));
 
+        foreach ($this->clients as $client) {
+            //if ($conn !== $client) {
+                $client->send(new Message('greet', array()));
+            //}
+        }
+
         echo "New connection! ({$conn->resourceId})\n";
     }
 

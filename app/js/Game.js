@@ -27,6 +27,11 @@ BattleCity.Game = function () {
         player.updateFields(message.data);
         self.players.push(player);
       }
+    } else if (message.type === 'greet') {
+      var bodies = self.players;
+      for (var i = 0, l = bodies.length; i < l; i++) {
+        bodies[i].notify();
+      }
     }
   });
 };
