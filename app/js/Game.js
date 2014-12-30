@@ -6,10 +6,11 @@ BattleCity.Game = function () {
     w: screen.canvas.width, 
     h: screen.canvas.height
   };
-  this.bodies = [].concat(new BattleCity.Player(this));
+  this.players = [].concat(new BattleCity.Player(this));
 
   var self = this;
   var tick = function () {
+    self.sync();
     self.update();
     self.draw(screen);
     requestAnimationFrame(tick);
@@ -19,20 +20,26 @@ BattleCity.Game = function () {
 };
 
 BattleCity.Game.prototype = {
+  sync: function () {
+    
+  },
+  
   update: function () {
-    for (var i = 0, l = this.bodies.length; i < l; i++) {
-      if (this.bodies[i].update !== undefined) {
-        this.bodies[i].update(screen);
+    var bodies = this.players;
+    for (var i = 0, l = bodies.length; i < l; i++) {
+      if (bodies[i].update !== undefined) {
+        bodies[i].update(screen);
       }
     }
   },
 
   draw: function (screen) {
     screen.clearRect(0, 0, this.size.w, this.size.h);
+    var bodies = this.players;
 
-    for (var i = 0, l = this.bodies.length; i < l; i++) {
-      if (this.bodies[i].draw !== undefined) {
-        this.bodies[i].draw(screen);
+    for (var i = 0, l = var bodies = this.players;.length; i < l; i++) {
+      if (var bodies = this.players;[i].draw !== undefined) {
+        var bodies = this.players;[i].draw(screen);
       }
     }
   },
