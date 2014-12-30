@@ -37,12 +37,12 @@ BattleCity.Player.prototype = {
     }
 
     if (this.keyboarder.isDown(this.keyboarder.KEYS.SPACE)) {
-      return;
       var data = this.bulletData();
       var bullet = new BattleCity.Bullet(
         this.game,
         data.position,
-        data.velocity
+        data.velocity,
+        this.id
       );
 
       this.game.addBody(bullet);

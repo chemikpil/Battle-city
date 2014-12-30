@@ -54,7 +54,7 @@ BattleCity.Game.prototype = {
   update: function () {
     var bodies = this.players;
     for (var i = 0, l = bodies.length; i < l; i++) {
-      if (bodies[i].update !== undefined && bodies[i].isOwn) {
+      if (bodies[i].update !== undefined && bodies[i].isOwn || bodies[i] instanceof BattleCity.Bullet) {
         bodies[i].update(screen);
       }
     }
@@ -72,7 +72,7 @@ BattleCity.Game.prototype = {
   },
 
   addBody: function (body) {
-    this.bodies.push(body);
+    this.players.push(body);
   },
 
   removePlayer: function (id) {
@@ -84,6 +84,13 @@ BattleCity.Game.prototype = {
       }
     }
 
+    if (index !== -1) {
+      this.players.splice(index, 1);
+    }
+  },
+
+  removeBullet: function (bullet) {
+    var index = this.players.indexOf(bullet);
     if (index !== -1) {
       this.players.splice(index, 1);
     }
