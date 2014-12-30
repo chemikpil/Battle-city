@@ -27,11 +27,13 @@ BattleCity.Game = function () {
         player.updateFields(message.data);
         self.players.push(player);
       }
-    } else if (message.type === 'greet') {
+    } else if (message.type === 'hello') {
       var bodies = self.players;
       for (var i = 0, l = bodies.length; i < l; i++) {
         bodies[i].notify();
       }
+    } else if (message.type === 'bye') {
+      self.removePlayer(message.data.id);
     }
   });
 };
@@ -73,10 +75,17 @@ BattleCity.Game.prototype = {
     this.bodies.push(body);
   },
 
-  removeBody: function (body) {
-    var bodyIndex = this.bodies.indexOf(body);
-    if (bodyIndex !== -1) {
-      this.bodies.splice(bodyIndex, 1);
+  removePlayer: function (id) {
+    var index = -1;
+    for (var i = 0, l = this.players.length; i < l; i++) {
+      if (this.players[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    if (index !== -1) {
+      this.players.splice(index, 1);
     }
   }
 };

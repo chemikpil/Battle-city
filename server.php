@@ -23,9 +23,7 @@ class BattleServer implements MessageComponentInterface
         $conn->send(new Message('connection', array('id' => $conn->resourceId)));
 
         foreach ($this->clients as $client) {
-            //if ($conn !== $client) {
-                $client->send(new Message('greet', array()));
-            //}
+            $client->send(new Message('hello', array()));
         }
 
         echo "New connection! ({$conn->resourceId})\n";
@@ -46,6 +44,12 @@ class BattleServer implements MessageComponentInterface
 
     public function onClose(ConnectionInterface $conn)
     {
+        foreach ($this->clients as $client) {
+            if ($conn !== $client) {
+                $client->send(new Message('bye', array('id' => $conn->resourceId)));
+            }
+        }
+
         $this->clients->detach($conn);
 
         echo "Connection {$conn->resourceId} has disconnected\n";
