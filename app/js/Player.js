@@ -46,6 +46,7 @@ BattleCity.Player.prototype = {
       );
 
       this.game.addBody(bullet);
+      //bullet.notify();
     }
   },
   

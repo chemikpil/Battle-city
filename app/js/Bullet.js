@@ -31,7 +31,8 @@ BattleCity.Bullet.prototype = {
     return {
       'id': this.id,
       'x': this.position.x,
-      'y': this.position.y
+      'y': this.position.y,
+      'velocity': this.velocity
     };
   },
 

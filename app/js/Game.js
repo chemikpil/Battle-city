@@ -34,6 +34,8 @@ BattleCity.Game = function () {
       }
     } else if (message.type === 'bye') {
       self.removePlayer(message.data.id);
+    } else if (message.type === 'bullet') {
+      self.players.push(new BattleCity.Bullet(self, {x: message.data.x, y: message.data.y}, message.data.velocity, message.data.id));
     }
   });
 };
