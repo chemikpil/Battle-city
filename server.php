@@ -20,7 +20,7 @@ class BattleServer implements MessageComponentInterface
     {
         $this->clients->attach($conn);
 
-        $conn->send(new Message('ID', $conn->resourceId));
+        $conn->send(new Message('connection', array('id' => $conn->resourceId)));
 
         echo "New connection! ({$conn->resourceId})\n";
     }

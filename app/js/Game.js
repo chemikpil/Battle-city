@@ -6,11 +6,8 @@ BattleCity.Game = function () {
     w: screen.canvas.width, 
     h: screen.canvas.height
   };
-  this.players = [].concat(new BattleCity.Player(this));
-  this.websocketClient = new BattleCity.WebsocketClient('ws://localhost:8080', function () {
-    
-  });
-  
+  this.players = [];
+
   var self = this;
   var tick = function () {
     self.update();
@@ -18,22 +15,39 @@ BattleCity.Game = function () {
     requestAnimationFrame(tick);
   }
 
-  tick();
+  this.websocketClient = new BattleCity.WebsocketClient('ws://localhost:8080', function (message) {
+    if (message.type === 'connection') {
+      var player = new BattleCity.Player(self, message.data.id);
+      player.isOwn = true;
+      self.players.push(player);
+      tick();
+    } else if (message.type === 'player') {
+      if (!self.sync(message.data)) {
+        var player = new BattleCity.Player(self, message.data.id);
+        player.updateFields(message.data);
+        self.players.push(player);
+      }
+    }
+  });
 };
 
 BattleCity.Game.prototype = {
-  sync: function (id, data) {
+  sync: function (data) {
+    var id = data.id;
+    var found = false;
     this.players.map(function (player) {
       if (player.id === id) {
-        
+        player.updateFields(data);
+        found = true;
       }
     });
+    return found;
   },
   
   update: function () {
     var bodies = this.players;
     for (var i = 0, l = bodies.length; i < l; i++) {
-      if (bodies[i].update !== undefined) {
+      if (bodies[i].update !== undefined && bodies[i].isOwn) {
         bodies[i].update(screen);
       }
     }
