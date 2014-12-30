@@ -40,7 +40,7 @@
     },
     
     addBody: function (body) {
-      this.bodies.push(body);
+      this.bodies[body.id] = body;
     },
     
     removeBody: function (body) {
@@ -93,7 +93,8 @@
         var bullet = new Bullet(
           this.game,
           data.position,
-          data.velocity
+          data.velocity,
+          this.id
         );
         
         this.game.addBody(bullet);
@@ -158,8 +159,9 @@
     }
   };
   
-  var Bullet = function (game, position, velocity) {
+  var Bullet = function (game, position, velocity, id) {
     this.game = game;
+    this.id = id;
     this.position = position;
     this.size = {
       w: 2,
@@ -172,11 +174,26 @@
     update: function () {
       this.position.x += this.velocity.x;
       this.position.y += this.velocity.y;
+      this.notify();
     },
     
     draw: function (screen) {
       screen.fillStyle = '#adadad';
       screen.fillRect(this.position.x, this.position.y, this.size.w, this.size.h);
+    },
+
+    notify: function () {
+      this.game.websocketClient.send(
+          {
+            'type': 'bullet',
+            'data': {
+              'id': this.id,
+              'x': this.position.x,
+              'y': this.position.y,
+              'velocity': this.velocity
+            }
+          }
+      );
     }
   };
   
@@ -237,6 +254,17 @@
         player.position.y = messageData.y;
 
         self.game.bodies[messageData.id] = player;
+      }
+
+      else if (messageType == 'bullet') {
+        self.game.addBody(
+            new Bullet(
+                self.game,
+                {'x': messageData.x, 'y': messageData.y},
+                messageData.velocity,
+                messageData.id
+            )
+        );
       }
     }
   };
