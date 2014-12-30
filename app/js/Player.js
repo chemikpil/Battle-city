@@ -1,7 +1,8 @@
 var BattleCity = BattleCity || {};
 
-BattleCity.Player = function (game) {
+BattleCity.Player = function (game, id) {
   this.game = game;
+  this.id = id || 1;
   this.position = {
     x: this.game.size.w / 2 - 13, 
     y: this.game.size.h - 30 
@@ -31,6 +32,7 @@ BattleCity.Player.prototype = {
     }
 
     if (this.keyboarder.isDown(this.keyboarder.KEYS.SPACE)) {
+      return;
       var data = this.bulletData();
       console.log(data);
       var bullet = new BattleCity.Bullet(
