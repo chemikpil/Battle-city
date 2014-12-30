@@ -6,6 +6,9 @@ BattleCity.Game = function () {
     w: screen.canvas.width, 
     h: screen.canvas.height
   };
+  this.websocketClient = new BattleCity.WebsocketClient('ws://localhost:8080', function () {
+
+  });
   this.bodies = [].concat(new BattleCity.Player(this));
 
   var self = this;
