@@ -8,12 +8,11 @@ BattleCity.Game = function () {
   };
   this.players = [].concat(new BattleCity.Player(this));
   this.websocketClient = new BattleCity.WebsocketClient('ws://localhost:8080', function () {
-
+    
   });
   
   var self = this;
   var tick = function () {
-    self.sync();
     self.update();
     self.draw(screen);
     requestAnimationFrame(tick);
@@ -23,8 +22,12 @@ BattleCity.Game = function () {
 };
 
 BattleCity.Game.prototype = {
-  sync: function () {
-    
+  sync: function (id, data) {
+    this.players.map(function (player) {
+      if (player.id === id) {
+        
+      }
+    });
   },
   
   update: function () {
@@ -41,8 +44,8 @@ BattleCity.Game.prototype = {
     var bodies = this.players;
 
     for (var i = 0, l = var bodies = this.players;.length; i < l; i++) {
-      if (var bodies = this.players;[i].draw !== undefined) {
-        var bodies = this.players;[i].draw(screen);
+      if (bodies[i].draw !== undefined) {
+        bodies[i].draw(screen);
       }
     }
   },
