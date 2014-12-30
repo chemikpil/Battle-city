@@ -12,10 +12,10 @@ BattleCity.Bullet = function (game, position, velocity) {
 
 BattleCity.Bullet.prototype = {
   update: function () {
-//    if (this.position.x < 0 || this.position.y < 0 || this.position.x > this.game.size.w || this.position.y > this.game.size.h) {
-//      this.game.removeBody(this);
-//      return; 
-//    }
+    if (this.position.x < 0 || this.position.y < 0 || this.position.x > this.game.size.w || this.position.y > this.game.size.h) {
+      this.game.removeBody(this);
+      return; 
+    }
 
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
