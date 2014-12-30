@@ -7,7 +7,10 @@ BattleCity.Game = function () {
     h: screen.canvas.height
   };
   this.players = [].concat(new BattleCity.Player(this));
+  this.websocketClient = new BattleCity.WebsocketClient('ws://localhost:8080', function () {
 
+  });
+  
   var self = this;
   var tick = function () {
     self.sync();
