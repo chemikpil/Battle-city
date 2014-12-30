@@ -43,7 +43,7 @@ BattleCity.Game.prototype = {
     screen.clearRect(0, 0, this.size.w, this.size.h);
     var bodies = this.players;
 
-    for (var i = 0, l = var bodies = this.players;.length; i < l; i++) {
+    for (var i = 0, l = bodies.length; i < l; i++) {
       if (bodies[i].draw !== undefined) {
         bodies[i].draw(screen);
       }
