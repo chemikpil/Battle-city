@@ -22,7 +22,6 @@ BattleCity.Game = function () {
   }
   
   this.initAssets(function () {
-    console.log(self.assets.getAsset('img/player.png'));
     tick();
   });
 };
