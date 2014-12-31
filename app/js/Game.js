@@ -7,6 +7,7 @@ BattleCity.Game = function () {
     h: screen.canvas.height
   };
   this.host = new BattleCity.Player(this);
+  this.assets = new BattleCity.AssetManager();
   
   var self = this;
   var fpsContainer = document.getElementById('fps');
@@ -18,7 +19,11 @@ BattleCity.Game = function () {
     fpsContainer.innerHTML = fps.getFPS() + ' fps';
     requestAnimationFrame(tick);
   }
-  tick();
+  
+  this.initAssets(function () {
+    console.log(self.assets.getAsset('img/player.png'));
+    tick();
+  });
 };
 
 BattleCity.Game.prototype = {
@@ -36,5 +41,12 @@ BattleCity.Game.prototype = {
         bodies[i].draw(screen);
       }
     }
+  },
+  
+  initAssets: function (callback) {
+    this.assets.queneDownload('img/map.png');
+    this.assets.queneDownload('img/player.png');
+    
+    this.assets.downloadAll(callback);
   }
 };
