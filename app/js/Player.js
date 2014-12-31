@@ -17,7 +17,13 @@ BattleCity.Player.prototype = {
   },
   
   draw: function (screen) {
-    screen.fillStyle = '#adadad';
-    screen.fillRect(this.position.x, this.position.y, this.size.w, this.size.h);
+    var sprite = this.game.assets.getAsset('img/player.png');
+    
+    screen.drawImage(sprite, 
+       0 + (this.size.h * this.frame), 0, 
+       this.size.w, this.size.h, 
+       this.position.x, this.position.y, 
+       this.size.w, this.size.h
+    );
   }
 };
