@@ -8,12 +8,14 @@ BattleCity.Game = function () {
   };
   
   var self = this;
+  var fpsContainer = document.getElementById('fps');
   
   
   var tick = function () {
     self.update();
     self.draw();
     
+    fpsContainer.innerHTML = fps.getFPS() + ' fps';
     requestAnimationFrame(tick);
   }
   tick();

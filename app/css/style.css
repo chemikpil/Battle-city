@@ -1,0 +1,23 @@
+body {
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+}
+
+canvas {
+  border: 25px solid #979184;
+
+  background-color: #000;
+}
+
+.game {
+  display: inline-block;
+  position: relative;
+}
+
+#fps {
+  position: absolute;
+  top: 40px;
+  left: 40px;
+
+  color: #fff;
+}

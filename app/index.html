@@ -3,30 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <title>Battle city</title>
-
-  <script src="js/WebsocketClient.js"></script>
-  <script src="js/Game.js"></script>
-  <script src="js/Player.js"></script>
-  <script src="js/Bullet.js"></script>
-  <script src="js/Keyboarder.js"></script>
-  <script src="js/battle-city.js"></script>
   
-  <style>
-    body {
-      text-align: center;
-    }
-    
-    canvas {
-      border: 25px solid #979184;
-      
-      background-color: #000;
-    }
-  </style>
+  <link rel="stylesheet" href="css/style.css">
+  
+  <script src="js/helpers.js"></script>
+  <script src="js/Game.js"></script>
+  <script src="js/battle-city.js"></script>
 </head>
 <body>
   
   <h1>Battle City</h1>
   
-  <canvas width="700" height="416" id="screen"></canvas>
+  <div class="game">
+    <span id="fps"></span>
+    <canvas width="416" height="416" id="screen"></canvas>
+  </div>
 </body>
 </html>
