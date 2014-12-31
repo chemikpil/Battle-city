@@ -8,12 +8,26 @@ BattleCity.Player = function (game) {
     y: this.game.size.h - this.size.h
   };
   this.frame = 0;
-  this.host = false;
+  this.velocity = 2;
+  
+  this.keyboarder = false;
 };
 
 BattleCity.Player.prototype = {
   update: function () {
-    
+    if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT) && (this.position.x > 0)) {
+      this.position.x -= this.velocity;
+      this.frame = 3;
+    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT) && (this.position.x + this.size.w < this.game.size.w)) {
+      this.position.x += this.velocity;
+      this.frame = 1;
+    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.UP) && (this.position.y > 0)) {
+      this.position.y -= this.velocity;
+      this.frame = 0;
+    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN) && (this.position.y + this.size.h < this.game.size.h)) {
+      this.position.y += this.velocity;
+      this.frame = 2;
+    }
   },
   
   draw: function (screen) {
@@ -25,5 +39,9 @@ BattleCity.Player.prototype = {
        this.position.x, this.position.y, 
        this.size.w, this.size.h
     );
+  },
+  
+  initKeyboarder: function () {
+    this.keyboarder = new BattleCity.Keyboarder();
   }
 };

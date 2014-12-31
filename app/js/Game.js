@@ -6,8 +6,9 @@ BattleCity.Game = function () {
     w: screen.canvas.width, 
     h: screen.canvas.height
   };
-  this.host = new BattleCity.Player(this);
   this.assets = new BattleCity.AssetManager();
+  this.host = new BattleCity.Player(this);
+  this.host.initKeyboarder();
   
   var self = this;
   var fpsContainer = document.getElementById('fps');
@@ -28,7 +29,13 @@ BattleCity.Game = function () {
 
 BattleCity.Game.prototype = {
   update: function () {
+    var bodies = [].concat(this.host);
     
+    for (var i = 0, l = bodies.length; i < l; i++) {
+      if (bodies[i].update !== undefined) {
+        bodies[i].update();
+      }
+    }
   },
   
   draw: function (screen) {
