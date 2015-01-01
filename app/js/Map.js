@@ -64,12 +64,17 @@ BattleCity.Map.prototype = {
     }
   },
   
-  checkCollision: function (posx, posy) {
+  checkCollision: function (posx, posy, bullet) {
     var x = Math.floor(posx / this.tile.w); 
     var y = Math.floor(posy / this.tile.h);
     
     var index = y * this.cols + x;
+    var mapTile = this.map[index];
     
-    return (this.map[index] === 3) ? 0 : this.map[index];
+    if (bullet && mapTile === 1) {
+      this.map[index] = 0;
+    }
+    
+    return (mapTile === 3) ? 0 : mapTile;
   }
 };

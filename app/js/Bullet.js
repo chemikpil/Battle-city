@@ -14,7 +14,7 @@ BattleCity.Bullet = function (game, owner, velocity) {
 
 BattleCity.Bullet.prototype = {
   update: function () {
-    if (this.position.x < 0 || this.position.y < 0 || this.position.x > this.game.size.w || this.position.y > this.game.size.h) {
+    if (this.position.x < 0 || this.position.y < 0 || this.position.x > this.game.size.w || this.position.y > this.game.size.h || this.game.map.checkCollision(this.position.x, this.position.y, true)) {
       this.game.removeBullet(this);
       return; 
     }
