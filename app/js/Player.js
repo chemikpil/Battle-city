@@ -14,8 +14,8 @@ BattleCity.Player = function (game) {
   this.animationState = 0;
   this.animationStateDelay = 100;
   this.velocity = 1.5;
-  
-  this.keyboarder = false;
+  this.shotDelay = 500;
+  this.shotVelocity = -7;
 };
 
 BattleCity.Player.prototype = {
@@ -28,6 +28,12 @@ BattleCity.Player.prototype = {
       this.position.y -= this.velocity;  
     } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN) && this.canMoveDown()) {
       this.position.y += this.velocity;
+    }
+    
+    if (this.keyboarder.isDown(this.keyboarder.KEYS.SPACE)) {
+      if (this.canShot()) {
+        this.game.addBullet(new BattleCity.Bullet(this.game, this, this.shotVelocity))
+      }
     }
   },
   
@@ -86,5 +92,14 @@ BattleCity.Player.prototype = {
       && !this.game.map.checkCollision(this.position.x + this.size.w + this.velocity, this.position.y) 
       && !this.game.map.checkCollision(this.position.x + this.size.w + this.velocity, this.position.y + this.size.h)
     );
+  },
+  
+  canShot: function () {
+    if (this.lastShot === undefined) this.lastShot = 0;
+    if (+new Date() - this.lastShot > this.shotDelay) {
+      this.lastShot = +new Date();
+      return true;
+    }
+    return false
   }
 };

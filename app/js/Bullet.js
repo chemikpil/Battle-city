@@ -1,14 +1,15 @@
 var BattleCity = BattleCity || {};
 
-BattleCity.Bullet = function (game, position, velocity, id) {
+BattleCity.Bullet = function (game, owner, velocity) {
   this.game = game;
-  this.id = id;
-  this.position = position;
+  this.owner = owner;
+  this.velocity = velocity;
+  this.position = {};
   this.size = {
     w: 2,
     h: 3
   };
-  this.velocity = velocity;
+  this.setDirection();
 };
 
 BattleCity.Bullet.prototype = {
@@ -17,30 +18,36 @@ BattleCity.Bullet.prototype = {
       this.game.removeBullet(this);
       return; 
     }
-
+    
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
   },
-
+  
   draw: function (screen) {
     screen.fillStyle = '#adadad';
     screen.fillRect(this.position.x, this.position.y, this.size.w, this.size.h);
   },
-
-  toJSON: function () {
-    return {
-      'id': this.id,
-      'x': this.position.x,
-      'y': this.position.y,
-      'velocity': this.velocity
-    };
-  },
-
-  notify: function () {
-    var data = {
-      'type': 'bullet',
-      'data': this.toJSON()
+  
+  setDirection: function () {
+    switch (this.owner.frame) {
+        case 0:
+          this.position = {x: this.owner.position.x + (this.owner.size.h / 2) - 1, y: this.owner.position.y};
+          this.velocity = {x: 0, y: this.velocity}
+          break;
+        case 1:
+          this.position = {x: this.owner.position.x + this.owner.size.h, y: this.owner.position.y + (this.owner.size.w / 2) - 1};
+          this.velocity = {x: Math.abs(this.velocity), y: 0}
+          break;
+        case 2:
+          this.position = {x: this.owner.position.x + (this.owner.size.h / 2) - 1, y: this.owner.position.y + this.owner.size.w};
+          this.velocity = {x: 0, y: Math.abs(this.velocity)};
+          break;
+        case 3:
+          this.position = {x: this.owner.position.x, y: this.owner.position.y + (this.owner.size.w / 2) - 1};
+          this.velocity = {x: this.velocity, y: 0};
+          break;
+        default:
+          throw('ERROR: unknow number of frame');
     }
-    this.game.websocketClient.send(data);
   }
 };
