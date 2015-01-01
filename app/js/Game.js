@@ -40,15 +40,15 @@ BattleCity.Game.prototype = {
   
   draw: function (screen) {
     screen.clearRect(0, 0, this.size.w, this.size.h);
-    this.map.draw(screen);
     
     var bodies = [].concat(this.host);
-    
     for (var i = 0, l = bodies.length; i < l; i++) {
       if (bodies[i].draw !== undefined) {
         bodies[i].draw(screen);
       }
     }
+    
+    this.map.draw(screen);
   },
   
   initAssets: function (callback) {
