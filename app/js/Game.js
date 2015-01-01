@@ -36,6 +36,8 @@ BattleCity.Game = function (name) {
         player.setPosition(message.data);
         self.players.push(player);
       }
+    } else if (message.type === 'bye') {
+      self.removePlayer(message.data.id);
     }
   });
 };
@@ -79,6 +81,20 @@ BattleCity.Game.prototype = {
       }
     });
     return found;
+  },
+  
+  removePlayer: function (id) {
+    var index = -1;
+    for (var i = 0, l = this.players.length; i < l; i++) {
+      if (this.players[i].id === id) {
+        index = i;
+        break;
+      }
+    }
+
+    if (index !== -1) {
+      this.players.splice(index, 1);
+    }
   },
   
   initAssets: function (callback) {
