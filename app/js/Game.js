@@ -8,8 +8,8 @@ BattleCity.Game = function (name) {
   };
   this.assets = new BattleCity.AssetManager();
   this.map = new BattleCity.Map(this);
-  this.host = new BattleCity.Player(this, name);
-  this.host.initKeyboarder();
+  this.host = null;
+  this.players = [];
   this.bullets = [];
   
   var self = this;
@@ -21,10 +21,22 @@ BattleCity.Game = function (name) {
     
     fpsContainer.innerHTML = fps.getFPS() + ' fps';
     requestAnimationFrame(tick);
-  }
+  };
   
-  this.initAssets(function () {
-    tick();
+  this.websocketClient = new BattleCity.WebsocketClient('ws://localhost:8080', function (message) {
+    if (message.type === 'connection') {
+      self.host = new BattleCity.Player(self, message.data.id, name);
+      self.host.initKeyboarder();
+      self.initAssets(function () {
+        tick();
+      });
+    } else if (message.type === 'player') {
+      if (!self.sync(message.data)) {
+        var player = new BattleCity.Player(self, message.data.id, message.data.name);
+        player.setPosition(message.data);
+        self.players.push(player);
+      }
+    }
   });
 };
 
@@ -42,9 +54,9 @@ BattleCity.Game.prototype = {
   draw: function (screen) {
     screen.clearRect(0, 0, this.size.w, this.size.h);
     
-    var bodies = [].concat(this.host).concat(this.bullets);
+    var bodies = [].concat(this.host).concat(this.players).concat(this.bullets);
     for (var i = 0, l = bodies.length; i < l; i++) {
-      if (bodies[i].draw !== undefined) {
+      if (bodies[i] !== undefined && bodies[i].draw !== undefined) {
         bodies[i].draw(screen);
       }
     }
@@ -52,6 +64,21 @@ BattleCity.Game.prototype = {
     this.map.draw(screen);
     
     this.host.drawName(screen);
+    for (var i = 0, l = this.players.length; i < l; i++) {
+      this.players[i].drawName(screen);
+    }
+  },
+  
+  sync: function (data) {
+    var id = data.id;
+    var found = false;
+    this.players.map(function (player) {
+      if (player.id === id) {
+        player.setPosition(data);
+        found = true;
+      }
+    });
+    return found;
   },
   
   initAssets: function (callback) {

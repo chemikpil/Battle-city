@@ -1,6 +1,6 @@
 var BattleCity = BattleCity || {};
 
-BattleCity.Player = function (game, name) {
+BattleCity.Player = function (game, id, name) {
   this.game = game;
   this.name = name;
   this.size = { w: 26, h: 26 };
@@ -8,6 +8,7 @@ BattleCity.Player = function (game, name) {
     x: (this.game.size.w / 2) - (this.size.w / 2),
     y: this.game.size.h - this.size.h
   };
+  this.id = id;
   
   this.position.x = this.position.x - 64;
   
@@ -23,12 +24,16 @@ BattleCity.Player.prototype = {
   update: function () {
     if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT) && this.canMoveLeft()) {
       this.position.x -= this.velocity;
+      this.notify();
     } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT) && this.canMoveRight()) {
       this.position.x += this.velocity;
+      this.notify();
     } else if (this.keyboarder.isDown(this.keyboarder.KEYS.UP) && this.canMoveUp()) {
       this.position.y -= this.velocity;  
+      this.notify();
     } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN) && this.canMoveDown()) {
       this.position.y += this.velocity;
+      this.notify();
     }
     
     if (this.keyboarder.isDown(this.keyboarder.KEYS.SPACE)) {
@@ -111,5 +116,29 @@ BattleCity.Player.prototype = {
       return true;
     }
     return false
+  },
+  
+  setPosition: function (data) {
+    this.position.x = data.x;
+    this.position.y = data.y;
+    this.frame = data.frame;
+  },
+  
+  toJSON: function () {
+    return {
+      id: this.id,
+      name: this.name,
+      frame: this.frame,
+      x: this.position.x,
+      y: this.position.y
+    };
+  },
+  
+  notify: function () {
+    var data = {
+      'type': 'player',
+      'data': this.toJSON()
+    }
+    this.game.websocketClient.send(data);
   }
 };
