@@ -7,6 +7,7 @@ BattleCity.Game = function () {
     h: screen.canvas.height
   };
   this.assets = new BattleCity.AssetManager();
+  this.map = new BattleCity.Map(this);
   this.host = new BattleCity.Player(this);
   this.host.initKeyboarder();
   
@@ -39,6 +40,7 @@ BattleCity.Game.prototype = {
   
   draw: function (screen) {
     screen.clearRect(0, 0, this.size.w, this.size.h);
+    this.map.draw(screen);
     
     var bodies = [].concat(this.host);
     
