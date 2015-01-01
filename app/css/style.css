@@ -21,3 +21,51 @@ canvas {
 
   color: #fff;
 }
+
+#welcome {
+  position: absolute;
+  top: 25px;
+  left: 25px;
+  width: 416px;
+  height: 416px;
+  padding-top: 50px;
+  
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  
+  background-color: #000;
+  
+  color: #fff;
+}
+
+#welcome label {
+  display: inline-block;
+  line-height: 22px;
+}
+
+#welcome input {
+  width: 150px;
+  padding-left: 5px;
+  
+  border: 1px solid rgba(255, 255, 255, .3);
+  
+  background-color: #000;
+  
+  color: #fff;
+  line-height: 20px;
+}
+
+#welcome button {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 0 10px;
+  
+  border: none;
+  
+  background-color: #e16f42;
+  
+  color: #fff;
+  line-height: 20px;
+  text-transform: uppercase;
+  cursor: pointer;
+}

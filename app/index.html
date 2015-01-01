@@ -13,15 +13,28 @@
   <script src="js/Bullet.js"></script>
   <script src="js/Player.js"></script>
   <script src="js/Game.js"></script>
-  <script src="js/battle-city.js"></script>
 </head>
 <body>
   
   <h1>Battle City</h1>
   
   <div class="game">
+    <div id="welcome">
+      <h1><img src="img/logo.png" alt="" width="300"></h1>
+      
+      <form id="welcome-form" method="get">
+        <div class="controls">
+          <label for="name">Name: </label>
+          <input type="text" name="name" id="name">
+        </div>
+        
+        <button name="start">Play</button>
+      </form>
+    </div>
     <span id="fps"></span>
     <canvas width="416" height="416" id="screen"></canvas>
   </div>
+  
+  <script src="js/battle-city.js"></script>
 </body>
 </html>

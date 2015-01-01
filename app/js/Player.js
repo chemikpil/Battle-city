@@ -1,7 +1,8 @@
 var BattleCity = BattleCity || {};
 
-BattleCity.Player = function (game) {
+BattleCity.Player = function (game, name) {
   this.game = game;
+  this.name = name;
   this.size = { w: 26, h: 26 };
   this.position = {
     x: (this.game.size.w / 2) - (this.size.w / 2),

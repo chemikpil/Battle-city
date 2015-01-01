@@ -1,6 +1,6 @@
 var BattleCity = BattleCity || {};
 
-BattleCity.Game = function () {
+BattleCity.Game = function (name) {
   var screen = document.getElementById('screen').getContext('2d');
   this.size = {
     w: screen.canvas.width, 
@@ -8,7 +8,7 @@ BattleCity.Game = function () {
   };
   this.assets = new BattleCity.AssetManager();
   this.map = new BattleCity.Map(this);
-  this.host = new BattleCity.Player(this);
+  this.host = new BattleCity.Player(this, name);
   this.host.initKeyboarder();
   this.bullets = [];
   
