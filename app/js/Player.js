@@ -13,7 +13,7 @@ BattleCity.Player = function (game) {
   this.frame = 0;
   this.animationState = 0;
   this.animationStateDelay = 100;
-  this.velocity = 2;
+  this.velocity = 1.5;
   
   this.keyboarder = false;
 };
@@ -56,8 +56,8 @@ BattleCity.Player.prototype = {
   canMoveUp:  function () {
     this.frame = 0;
     return ((this.position.y > 0)  
-      && !this.game.map.checkCollision(this.position.x, this.position.y - 1) 
-      && !this.game.map.checkCollision(this.position.x + this.size.w - 1, this.position.y - 1)
+      && !this.game.map.checkCollision(this.position.x, this.position.y - this.velocity) 
+      && !this.game.map.checkCollision(this.position.x + this.size.w, this.position.y - this.velocity)
     );
   },
   
@@ -65,8 +65,8 @@ BattleCity.Player.prototype = {
     this.frame = 2;
     return (
       (this.position.y + this.size.h < this.game.size.h)
-      && !this.game.map.checkCollision(this.position.x, this.position.y + this.size.h) 
-      && !this.game.map.checkCollision(this.position.x + this.size.w - 1, this.position.y + this.size.h)
+      && !this.game.map.checkCollision(this.position.x, this.position.y + this.size.h + this.velocity) 
+      && !this.game.map.checkCollision(this.position.x + this.size.w, this.position.y + this.size.h + this.velocity)
     );
   },
   
@@ -74,8 +74,8 @@ BattleCity.Player.prototype = {
     this.frame = 3;
     return (
       (this.position.x > 0)
-      && !this.game.map.checkCollision(this.position.x - 1, this.position.y) 
-      && !this.game.map.checkCollision(this.position.x - 1, this.position.y + this.size.h - 1)
+      && !this.game.map.checkCollision(this.position.x - this.velocity, this.position.y) 
+      && !this.game.map.checkCollision(this.position.x - this.velocity, this.position.y + this.size.h)
     );
   },
   
@@ -83,8 +83,8 @@ BattleCity.Player.prototype = {
     this.frame = 1;
     return (
       (this.position.x + this.size.w < this.game.size.w)
-      && !this.game.map.checkCollision(this.position.x + this.size.w, this.position.y) 
-      && !this.game.map.checkCollision(this.position.x + this.size.w, this.position.y + this.size.h - 1)
+      && !this.game.map.checkCollision(this.position.x + this.size.w + this.velocity, this.position.y) 
+      && !this.game.map.checkCollision(this.position.x + this.size.w + this.velocity, this.position.y + this.size.h)
     );
   }
 };
