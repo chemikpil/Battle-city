@@ -62,5 +62,16 @@ BattleCity.Map.prototype = {
       }
       row++;
     }
+  },
+  
+  checkCollision: function (posx, posy) {
+    var x = Math.floor(posx / this.tile.w); 
+    var y = Math.floor(posy / this.tile.h);
+    
+      console.log(x, y);
+    
+    var index = y * this.cols + x;
+    
+    return this.map[index];
   }
 };

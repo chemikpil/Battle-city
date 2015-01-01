@@ -7,6 +7,10 @@ BattleCity.Player = function (game) {
     x: (this.game.size.w / 2) - (this.size.w / 2),
     y: this.game.size.h - this.size.h
   };
+  
+  this.position.x = 0;
+  this.position.y = 0;
+  
   this.frame = 0;
   this.animationState = 0;
   this.animationStateDelay = 100;
@@ -17,18 +21,14 @@ BattleCity.Player = function (game) {
 
 BattleCity.Player.prototype = {
   update: function () {
-    if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT) && (this.position.x > 0)) {
+    if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT) && this.canMoveLeft()) {
       this.position.x -= this.velocity;
-      this.frame = 3;
-    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT) && (this.position.x + this.size.w < this.game.size.w)) {
+    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT) && this.canMoveRight()) {
       this.position.x += this.velocity;
-      this.frame = 1;
-    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.UP) && (this.position.y > 0)) {
-      this.position.y -= this.velocity;
-      this.frame = 0;
-    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN) && (this.position.y + this.size.h < this.game.size.h)) {
+    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.UP) && this.canMoveUp()) {
+      this.position.y -= this.velocity;  
+    } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN) && this.canMoveDown()) {
       this.position.y += this.velocity;
-      this.frame = 2;
     }
   },
   
@@ -52,5 +52,40 @@ BattleCity.Player.prototype = {
   
   initKeyboarder: function () {
     this.keyboarder = new BattleCity.Keyboarder();
+  },
+  
+  canMoveUp:  function () {
+    this.frame = 0;
+    return ((this.position.y > 0)  
+      && !this.game.map.checkCollision(this.position.x, this.position.y - 1) 
+      && !this.game.map.checkCollision(this.position.x + this.size.w - 1, this.position.y - 1)
+    );
+  },
+  
+  canMoveDown: function () {
+    this.frame = 2;
+    return (
+      (this.position.y + this.size.h < this.game.size.h)
+      && !this.game.map.checkCollision(this.position.x, this.position.y + this.size.h) 
+      && !this.game.map.checkCollision(this.position.x + this.size.w - 1, this.position.y + this.size.h)
+    );
+  },
+  
+  canMoveLeft: function () {
+    this.frame = 3;
+    return (
+      (this.position.x > 0)
+      && !this.game.map.checkCollision(this.position.x - 1, this.position.y) 
+      && !this.game.map.checkCollision(this.position.x - 1, this.position.y + this.size.h - 1)
+    );
+  },
+  
+  canMoveRight: function () {
+    this.frame = 1;
+    return (
+      (this.position.x + this.size.w < this.game.size.w)
+      && !this.game.map.checkCollision(this.position.x + this.size.w, this.position.y) 
+      && !this.game.map.checkCollision(this.position.x + this.size.w, this.position.y + this.size.h - 1)
+    );
   }
 };
