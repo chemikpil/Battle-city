@@ -8,8 +8,7 @@ BattleCity.Player = function (game) {
     y: this.game.size.h - this.size.h
   };
   
-  this.position.x = 0;
-  this.position.y = 0;
+  this.position.x = this.position.x - 64;
   
   this.frame = 0;
   this.animationState = 0;
