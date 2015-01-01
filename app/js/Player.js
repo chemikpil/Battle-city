@@ -9,6 +9,7 @@ BattleCity.Player = function (game, id, name) {
     y: this.game.size.h - this.size.h
   };
   this.id = id;
+  this.shouldSync = false;
   
   this.position.x = this.position.x - 64;
   
@@ -24,22 +25,34 @@ BattleCity.Player.prototype = {
   update: function () {
     if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT) && this.canMoveLeft()) {
       this.position.x -= this.velocity;
-      this.notify();
+      this.shouldSync = true;
     } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT) && this.canMoveRight()) {
       this.position.x += this.velocity;
-      this.notify();
+      this.shouldSync = true;
     } else if (this.keyboarder.isDown(this.keyboarder.KEYS.UP) && this.canMoveUp()) {
       this.position.y -= this.velocity;  
-      this.notify();
+      this.shouldSync = true;
     } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN) && this.canMoveDown()) {
       this.position.y += this.velocity;
-      this.notify();
+      this.shouldSync = true;
     }
     
     if (this.keyboarder.isDown(this.keyboarder.KEYS.SPACE)) {
       if (this.canShot()) {
-        this.game.addBullet(new BattleCity.Bullet(this.game, this, this.shotVelocity))
+        this.game.addBullet(new BattleCity.Bullet(this.game, this, this.shotVelocity));
+        this.game.websocketClient.send({
+          type: 'bullet',
+          data: {
+            id: this.id,
+            velocity: this.shotVelocity
+          }
+        });
       }
+    }
+    
+    if(this.shouldSync) {
+      this.shouldSync = false;
+      this.notify();
     }
   },
   
@@ -76,6 +89,7 @@ BattleCity.Player.prototype = {
   
   canMoveUp:  function () {
     this.frame = 0;
+    this.shouldSync = true;
     return ((this.position.y > 0)  
       && !this.game.map.checkCollision(this.position.x, this.position.y - this.velocity) 
       && !this.game.map.checkCollision(this.position.x + this.size.w, this.position.y - this.velocity)
@@ -84,6 +98,7 @@ BattleCity.Player.prototype = {
   
   canMoveDown: function () {
     this.frame = 2;
+    this.shouldSync = true;
     return (
       (this.position.y + this.size.h < this.game.size.h)
       && !this.game.map.checkCollision(this.position.x, this.position.y + this.size.h + this.velocity) 
@@ -93,6 +108,7 @@ BattleCity.Player.prototype = {
   
   canMoveLeft: function () {
     this.frame = 3;
+    this.shouldSync = true;
     return (
       (this.position.x > 0)
       && !this.game.map.checkCollision(this.position.x - this.velocity, this.position.y) 
@@ -102,6 +118,7 @@ BattleCity.Player.prototype = {
   
   canMoveRight: function () {
     this.frame = 1;
+    this.shouldSync = true;
     return (
       (this.position.x + this.size.w < this.game.size.w)
       && !this.game.map.checkCollision(this.position.x + this.size.w + this.velocity, this.position.y) 

@@ -40,6 +40,12 @@ BattleCity.Game = function (name) {
       self.host.notify();
     } else if (message.type === 'bye') {
       self.removePlayer(message.data.id);
+    } else if (message.type === 'bullet') {
+      for (var i = 0, l = self.players.length; i < l; i++) {
+        if (self.players[i].id === message.data.id) {
+          self.bullets.push(new BattleCity.Bullet(self, self.players[i], message.data.velocity));   
+        }
+      }
     }
   });
 };
