@@ -36,6 +36,8 @@ BattleCity.Game = function (name) {
         player.setPosition(message.data);
         self.players.push(player);
       }
+    } else if (message.type === 'hello') {
+      self.host.notify();
     } else if (message.type === 'bye') {
       self.removePlayer(message.data.id);
     }
