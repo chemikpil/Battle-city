@@ -50,6 +50,8 @@ BattleCity.Game.prototype = {
     }
     
     this.map.draw(screen);
+    
+    this.host.drawName(screen);
   },
   
   initAssets: function (callback) {

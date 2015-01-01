@@ -56,6 +56,15 @@ BattleCity.Player.prototype = {
     );
   },
   
+  drawName: function (screen) {
+    var metrics = screen.measureText('~' + this.name);
+    var center = this.position.x + (this.size.w / 2) - (metrics.width / 2);
+    
+    screen.font = 'bold 10px Arial';
+    screen.fillStyle = '#f9c700';
+    screen.fillText('~' + this.name, center, this.position.y - 10);
+  },
+  
   initKeyboarder: function () {
     this.keyboarder = new BattleCity.Keyboarder();
   },
