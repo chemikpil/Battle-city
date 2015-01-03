@@ -93,6 +93,7 @@ BattleCity.Player.prototype = {
     return ((this.position.y > 0)  
       && !this.game.map.checkCollision(this.position.x, this.position.y - this.velocity) 
       && !this.game.map.checkCollision(this.position.x + this.size.w, this.position.y - this.velocity)
+      && !this.game.map.checkCollision(this.position.x + (this.size.w / 2), this.position.y - this.velocity)
     );
   },
   
@@ -103,6 +104,7 @@ BattleCity.Player.prototype = {
       (this.position.y + this.size.h < this.game.size.h)
       && !this.game.map.checkCollision(this.position.x, this.position.y + this.size.h + this.velocity) 
       && !this.game.map.checkCollision(this.position.x + this.size.w, this.position.y + this.size.h + this.velocity)
+      && !this.game.map.checkCollision(this.position.x + (this.size.w / 2), this.position.y + this.size.h + this.velocity)
     );
   },
   
@@ -113,6 +115,7 @@ BattleCity.Player.prototype = {
       (this.position.x > 0)
       && !this.game.map.checkCollision(this.position.x - this.velocity, this.position.y) 
       && !this.game.map.checkCollision(this.position.x - this.velocity, this.position.y + this.size.h)
+      && !this.game.map.checkCollision(this.position.x - this.velocity, this.position.y + (this.size.h / 2))
     );
   },
   
@@ -123,6 +126,7 @@ BattleCity.Player.prototype = {
       (this.position.x + this.size.w < this.game.size.w)
       && !this.game.map.checkCollision(this.position.x + this.size.w + this.velocity, this.position.y) 
       && !this.game.map.checkCollision(this.position.x + this.size.w + this.velocity, this.position.y + this.size.h)
+      && !this.game.map.checkCollision(this.position.x + this.size.w + this.velocity, this.position.y + (this.size.h / 2))
     );
   },
   
