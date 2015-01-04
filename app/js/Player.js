@@ -10,12 +10,18 @@ BattleCity.Player = function (game, id, name) {
   };
   this.id = id;
   this.shouldSync = false;
+  this.isSpawning = true;
   
   this.position.x = this.position.x - 64;
   
   this.frame = 0;
   this.animationState = 0;
   this.animationStateDelay = 100;
+  
+  this.spawnFrame = 0;
+  this.spawnStateDelay = 70;
+  this.spawningTime = 15;
+  
   this.velocity = 1.5;
   this.shotDelay = 500;
   this.shotVelocity = -7;
@@ -23,6 +29,8 @@ BattleCity.Player = function (game, id, name) {
 
 BattleCity.Player.prototype = {
   update: function () {
+    if (this.isSpawning) { return false;}
+    
     if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT) && this.canMoveLeft()) {
       this.position.x -= this.velocity;
       this.shouldSync = true;
@@ -57,6 +65,11 @@ BattleCity.Player.prototype = {
   },
   
   draw: function (screen) {
+    if (this.isSpawning) {
+      this.spawn(screen);
+      return false;
+    }
+    
     var sprite = this.game.assets.getAsset('img/player.png');
     
     if (this.lastAnimationState === undefined) this.lastAnimationState = 0;
@@ -67,7 +80,32 @@ BattleCity.Player.prototype = {
     
     
     screen.drawImage(sprite, 
-       0 + (this.size.h * this.frame), 0 + (this.animationState * this.size.w), 
+       0 + (this.size.w * this.frame), 0 + (this.animationState * this.size.h), 
+       this.size.w, this.size.h, 
+       this.position.x, this.position.y, 
+       this.size.w, this.size.h
+    );
+  },
+  
+  spawn: function (screen) {
+    var sprite = this.game.assets.getAsset('img/spawn.png');
+    
+    if (this.lastSpawnState === undefined) this.lastSpawnState = 0;
+    if (+new Date() - this.lastSpawnState > this.spawnStateDelay) {
+      this.spawningTime--;
+      this.spawnFrame++;
+      if (this.spawnFrame > 3) {
+        this.spawnFrame = 0;
+      }
+      this.lastSpawnState = +new Date();
+    }
+    
+    if (this.spawningTime <= 0) {
+      this.isSpawning = false;
+    }
+    
+    screen.drawImage(sprite, 
+       0 + (this.size.w * this.spawnFrame), 0, 
        this.size.w, this.size.h, 
        this.position.x, this.position.y, 
        this.size.w, this.size.h

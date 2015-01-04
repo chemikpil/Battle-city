@@ -73,7 +73,7 @@ BattleCity.Game.prototype = {
     
     this.map.draw(screen);
     
-    this.host.drawName(screen);
+    !this.host.isSpawning ? this.host.drawName(screen): '';
     for (var i = 0, l = this.players.length; i < l; i++) {
       this.players[i].drawName(screen);
     }
@@ -108,6 +108,7 @@ BattleCity.Game.prototype = {
   initAssets: function (callback) {
     this.assets.queneDownload('img/map.png');
     this.assets.queneDownload('img/player.png');
+    this.assets.queneDownload('img/spawn.png');
     
     this.assets.downloadAll(callback);
   },
