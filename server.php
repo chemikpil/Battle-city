@@ -20,7 +20,7 @@ class BattleServer implements MessageComponentInterface
     {
         $this->clients->attach($conn);
 
-        $conn->send(new Message('connection', array('id' => $conn->resourceId)));
+        $conn->send(new Message('connection', array('id' => $conn->resourceId, 'players' => count($this->clients))));
 
         foreach ($this->clients as $client) {
             $client->send(new Message('hello', array()));
