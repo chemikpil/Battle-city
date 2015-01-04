@@ -75,7 +75,7 @@ BattleCity.Game.prototype = {
     
     !this.host.isSpawning ? this.host.drawName(screen): '';
     for (var i = 0, l = this.players.length; i < l; i++) {
-      this.players[i].drawName(screen);
+      !this.players[i].isSpawning ? this.players[i].drawName(screen): '';
     }
   },
   
