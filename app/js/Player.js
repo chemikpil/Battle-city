@@ -181,6 +181,7 @@ BattleCity.Player.prototype = {
     this.position.x = data.x;
     this.position.y = data.y;
     this.frame = data.frame;
+    this.isSpawning = data.isSpawning;
   },
   
   toJSON: function () {
@@ -189,7 +190,8 @@ BattleCity.Player.prototype = {
       name: this.name,
       frame: this.frame,
       x: this.position.x,
-      y: this.position.y
+      y: this.position.y,
+      isSpawning: this.isSpawning
     };
   },
   
