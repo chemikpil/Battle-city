@@ -8,11 +8,14 @@ BattleCity.Player = function (game, id, name) {
     x: (this.game.size.w / 2) - (this.size.w / 2),
     y: this.game.size.h - this.size.h
   };
+  this.position.x = this.position.x - 64;
+  this.center = {
+    x: this.position.x + this.size.w / 2,
+    y: this.position.y + this.size.h / 2 
+  }
   this.id = id;
   this.shouldSync = false;
   this.isSpawning = true;
-  
-  this.position.x = this.position.x - 64;
   
   this.frame = 0;
   this.animationState = 0;
@@ -33,15 +36,19 @@ BattleCity.Player.prototype = {
     
     if (this.keyboarder.isDown(this.keyboarder.KEYS.LEFT) && this.canMoveLeft()) {
       this.position.x -= this.velocity;
+      this.center.x -= this.velocity;
       this.shouldSync = true;
     } else if (this.keyboarder.isDown(this.keyboarder.KEYS.RIGHT) && this.canMoveRight()) {
       this.position.x += this.velocity;
+      this.center.x += this.velocity;
       this.shouldSync = true;
     } else if (this.keyboarder.isDown(this.keyboarder.KEYS.UP) && this.canMoveUp()) {
-      this.position.y -= this.velocity;  
+      this.position.y -= this.velocity;
+      this.center.y -= this.velocity;
       this.shouldSync = true;
     } else if (this.keyboarder.isDown(this.keyboarder.KEYS.DOWN) && this.canMoveDown()) {
       this.position.y += this.velocity;
+      this.center.y += this.velocity;
       this.shouldSync = true;
     }
     
@@ -132,6 +139,7 @@ BattleCity.Player.prototype = {
       && !this.game.map.checkCollision(this.position.x, this.position.y - this.velocity) 
       && !this.game.map.checkCollision(this.position.x + this.size.w, this.position.y - this.velocity)
       && !this.game.map.checkCollision(this.position.x + (this.size.w / 2), this.position.y - this.velocity)
+      && !this.game.checkTanksCollision({center: {x: this.center.x, y: this.center.y - this.velocity}, size: this.size})
     );
   },
   
@@ -143,6 +151,7 @@ BattleCity.Player.prototype = {
       && !this.game.map.checkCollision(this.position.x, this.position.y + this.size.h + this.velocity) 
       && !this.game.map.checkCollision(this.position.x + this.size.w, this.position.y + this.size.h + this.velocity)
       && !this.game.map.checkCollision(this.position.x + (this.size.w / 2), this.position.y + this.size.h + this.velocity)
+      && !this.game.checkTanksCollision({center: {x: this.center.x, y: this.center.y + this.velocity}, size: this.size})
     );
   },
   
@@ -154,6 +163,7 @@ BattleCity.Player.prototype = {
       && !this.game.map.checkCollision(this.position.x - this.velocity, this.position.y) 
       && !this.game.map.checkCollision(this.position.x - this.velocity, this.position.y + this.size.h)
       && !this.game.map.checkCollision(this.position.x - this.velocity, this.position.y + (this.size.h / 2))
+      && !this.game.checkTanksCollision({center: {x: this.center.x - this.velocity, y: this.center.y}, size: this.size})
     );
   },
   
@@ -165,6 +175,7 @@ BattleCity.Player.prototype = {
       && !this.game.map.checkCollision(this.position.x + this.size.w + this.velocity, this.position.y) 
       && !this.game.map.checkCollision(this.position.x + this.size.w + this.velocity, this.position.y + this.size.h)
       && !this.game.map.checkCollision(this.position.x + this.size.w + this.velocity, this.position.y + (this.size.h / 2))
+      && !this.game.checkTanksCollision({center: {x: this.center.x + this.velocity, y: this.center.y}, size: this.size})
     );
   },
   
@@ -182,6 +193,8 @@ BattleCity.Player.prototype = {
     this.position.y = data.y;
     this.frame = data.frame;
     this.isSpawning = data.isSpawning;
+    this.center.x = data.x + this.size.w / 2;
+    this.center.y = data.y + this.size.h / 2;
   },
   
   toJSON: function () {

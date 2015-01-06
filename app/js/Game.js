@@ -123,5 +123,21 @@ BattleCity.Game.prototype = {
     if (index > -1) {
       this.bullets.splice(index, 1);
     }
+  },
+  
+  checkTanksCollision: function (data) {
+    var isColliding = false;
+    
+    for (var i = 0, l = this.players.length; i < l; i++) {
+      
+      if (checkCollision(data, this.players[i])) {
+        
+        isColliding = true;
+        break;
+      }
+      
+    }
+    
+    return isColliding;
   }
 };
